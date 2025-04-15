@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SQU-visor</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    
+</head>
+<body>
+    <div class="main-container">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+        <!-- Sidebar Section -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="chat-ai">SQU-visor</h2>
+                <button class="new-chat-btn">New Chat</button>
+                <input type="text" class="search-input" placeholder="Search..." />
+            </div>
+
+            <!-- Chat History -->
+            <ul id="chat-history" class="chat-history">
+                <li class="chat-item selected">
+                    <img src="{% static 'images/Frame.svg' %}" class="chat-icon" alt="Chat Icon" />
+                    Who teaches Python 2 this sem
+                </li>
+                <li class="chat-item">
+                    <img src="{% static 'images/Frame.svg' %}" class="chat-icon" alt="Chat Icon" />
+                    Apply To Leave For Emergency
+                </li>
+                <li class="chat-item">
+                    <img src="{% static 'images/Frame.svg' %}" class="chat-icon" alt="Chat Icon" />
+                    What Is UI UX Design?
+                </li>
+                <li class="chat-item">
+                    <img src="{% static 'images/Frame.svg' %}" class="chat-icon" alt="Chat Icon" />
+                    Create POS System
+                </li>
+                <li class="chat-item">
+                    <img src="{% static 'images/Frame.svg' %}" class="chat-icon" alt="Chat Icon" />
+                    What Is UX Audit?
+                </li>
+            </ul>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+
+                <button class="settings-btn" style="font-size: x-large;">Settings</button>
+
+                <button class="user-profile">
+                    <img src="{% static 'images/omori.png' %}" alt="User Avatar" class="avatar">
+                    <span style="font-size: large; font: bold;">Omori</span>
+                </button>
+
+            </div>
+        </aside>
+
+        <!-- Main Chat Section -->
+        <main class="chat-main">
+            <div id="chat-box" class="chat-box">
+            </div>
+
+            <!-- Chat Input Section -->
+            <div class="chat-input-container">
+                <div class="chat-input">
+                    
+                    <div class="icon attach-icon" onclick="document.getElementById('file-input').click();">
+                        <img src="{% static 'images/attach.svg' %}" alt="Attach" />
+                    </div>
+                    <input type="file" id="file-input" accept="application/pdf" style="display: none;" />
+                    <textarea id="user-input" class="text-input" placeholder="Ask me anything..."></textarea>
+
+                    <div class="btn-group">
+                        <button class="btn left" type="button">Student</button>
+                        <button class="btn right" type="button">Employee</button>
+                    </div>
+
+                    <div class="icon mic-icon">
+                        <img src="{% static 'images/Mic.svg' %}" alt="Mic" />
+                    </div>
+                    <div class="icon send-icon" onclick="sendMessage()">
+                        <img src="{% static 'images/arrowup.svg' %}" alt="Send" />
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+     
+        // Declare userRole outside the event listener to maintain its state
+        let userRole = 'general';
+       
+        // Handle button group for Student/Employee selection
+        document.querySelectorAll('.btn.left, .btn.right').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from both buttons
+                document.querySelectorAll('.btn.left, .btn.right').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.style.color = '#7A7669'; // Reset text color to default
+                });
+
+                // Add active class to the clicked button
+                this.classList.add('active');
+                this.style.color = 'skyblue'; // Highlight the selected button
+
+                // Update user role based on the active button
+                userRole = this.classList.contains('left') ? 'student' : 'employee';
+                console.log("User role:", userRole);
+            });
+        });
+
+
+        function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+           
+
+            const userMessage = userInput.value.trim();
+            if (userMessage) {
+                const userMessageElement = document.createElement('div');
+                userMessageElement.className = 'chat-message user';
+
+                // Format the time to exclude seconds
+                const timeString = new Date().toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                // Detect language direction (RTL for Arabic characters)
+                const isRTL = /[\u0600-\u06FF]/.test(userMessage);
+                userMessageElement.innerHTML = `
+                    <span class="timestamp">You ${timeString}</span>
+                    <div class="message-bubble" style="direction: ${isRTL ? 'rtl' : 'ltr'}; text-align: ${isRTL ? 'right' : 'left'};">
+                        ${userMessage}
+                    </div>
+                `;
+                chatBox.appendChild(userMessageElement);
+
+                // Send the user message to the server
+                fetch('{% url "chatbot_views" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('input[name="csrfmiddlewaretoken"]').value
+                },
+                body: new URLSearchParams({'user-input': userMessage , 'user-role': userRole })
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.response) {
+                
+
+                    // Parse the bot response as Markdown
+                    const parsedResponse = marked.parse(data.response);
+                    console.log("User role:", userRole);
+                    console.log(`Parsed response: ${parsedResponse}`);
+                    
+
+                    const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const isRTL = /[\u0600-\u06FF]/.test(data.response);
+
+                    const botMessageElement = document.createElement('div');
+                    botMessageElement.className = 'chat-message bot';
+                    botMessageElement.innerHTML = `
+                        <span class="timesBot">ASK.SQU ${timeString}</span>
+                        <div class="message-bubble" style="direction: ${isRTL ? 'rtl' : 'ltr'}; text-align: ${isRTL ? 'right' : 'left'};">
+                            ${parsedResponse}
+                        </div>
+                    `;
+                    chatBox.appendChild(botMessageElement);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                } else {
+                    alert('No response received from the server.');
+                    console.error('No response received from the server.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+                userInput.value = '';
+            }
+        }
+
+        
+
+        // Prevent icon buttons from affecting the state of Student/Employee buttons
+        document.querySelectorAll('.icon').forEach(icon => {
+            icon.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent interaction from altering the active state of the Student/Employee buttons
+            });
+        });
+
+        // Adjust textarea height dynamically
+        function adjustTextareaHeight(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = `${Math.min(textarea.scrollHeight, 96)}px`;
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+</html>
+

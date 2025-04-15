@@ -1,0 +1,464 @@
+
+:root {
+    --default-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --sidebar-bg: #1a202c;
+    --chat-bg: #f8f9fc;
+    --message-bg-user: #e2e8f0;
+    --message-bg-bot: #f1f5f9;
+    --highlight-color: #3b82f6;
+    --transition-duration: 0.3s;
+}
+
+body {
+    font-family: var(--default-font-family);
+    margin: 0;
+    background-color: #F0F1F2;
+}
+
+
+
+
+
+
+
+
+
+.main-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+
+}
+
+.sidebar {
+    width: 300px;
+    background-color: white;
+    color: D9D9D9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 15px;
+    margin: 10px;
+}
+
+.sidebar-header {
+    padding: 20px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+}
+
+.new-chat-btn {
+    background-color: #7A7669;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.search-input {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 15px;
+    border: none;
+    font-size: 0.9rem;
+}
+
+
+
+
+
+
+
+
+
+.chat-history {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    background-color: white ; /* White background for the chat container */
+    border-radius: 15px; /* Rounded corners for the container */
+    flex: 1;
+    padding-top: 8px;
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+     /* Default background for non-selected items */
+    border-radius: 200.68px;/* Fully rounded corners */
+    margin: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s, margin-right 0.3s; /* Smooth transition */
+}
+.chat-item.selected {
+    background: #F0F1F2; /* Background for the selected chat */
+    color: #333333; /* Darker text color for readability */
+    margin-right: 0px; /* Extend the selected item to the right edge */
+    border-radius: 200.68px  0  0 200.68px; /* Slightly adjust to look continuous */
+}
+
+.chat-item:hover {
+    background: rgba(255, 255, 255, 0.2); /* Lighter hover effect */
+}
+
+.chat-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px; /* Space between icon and text */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.sidebar-footer {
+    padding: 20px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 15px;
+}
+
+.settings-btn {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    background-color: #7A7669;
+    border-radius: 18px;
+    padding-right:7px;
+}
+
+
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    background-color: #7A7669;
+    border-radius: 18px;
+    padding-right:7px;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #F0F1F2;
+    border-radius: 25px;
+    margin: 10px 40px; /* Added more space on the left and right */
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #F0F1F2;
+    padding: 10px 20px;
+    border-bottom: 0px solid #ddd;
+    border-radius: 15px 15px 0 0;
+}
+
+
+
+
+
+.chat-box {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    background: #F0F1F2;
+}
+
+.chat-message {
+    margin-bottom: 10px;
+}
+
+.message-bubble {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background-color: white;
+    max-width: 80%;
+    word-break: break-word; /* Ensures long words break automatically */
+    font-family: "Plus Jakarta Sans-Regular", Helvetica; /* Apply the specified font */
+}
+
+.chat-message.user .message-bubble {
+    background-color: white;
+    align-self: flex-end;
+    text-align: right;
+}
+
+.chat-message.bot .message-bubble {
+    background-color: white;
+    align-self: flex-end;
+    text-align: right;
+}
+
+
+
+
+
+
+
+
+
+
+.chat-message {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-bubble {
+    padding: 15px;
+    border-radius: 15px;
+    max-width: 60%;
+}
+
+.chat-message.user .message-bubble {
+    align-self: flex-end;
+    text-align: right;
+    border-bottom-right-radius: 0;
+}
+
+.chat-message.bot .message-bubble {
+    align-self: flex-start;
+    text-align: left;
+    border-bottom-left-radius: 0;
+}
+
+.timestamp {
+    font-size: 0.75rem;
+    color: #888;
+    text-align: right;
+    margin-right: 0.3rem;
+    margin-bottom: 5px;
+    font-family: "Plus Jakarta Sans-Regular", Helvetica; /* Apply the specified font to timestamps */
+
+}
+.timesBot {
+    font-size: 0.75rem;
+    text-align: left;
+    margin-left: 0.3rem;
+    color: #888;
+    margin-bottom: 5px;
+    font-family: "Plus Jakarta Sans-Regular", Helvetica; /* Apply the specified font to timestamps */
+
+}
+
+
+
+
+
+
+
+
+
+
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: white;
+    gap: 10px;
+    border-top: 1px solid #ddd;
+    border-radius: 25px;
+    margin: 10px;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    background-color: var(--highlight-color);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+}
+
+.switch {
+    position: relative;
+    width: 100px;
+    height: 30px;
+    background-color: #3b82f6;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.switch-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-label {
+    width: 50%;
+    text-align: center;
+    color: white;
+    font-size: 0.9rem;
+    line-height: 30px;
+    transition: all 0.3s ease;
+}
+
+
+
+.switch-input:checked + .switch-label::before {
+    content: 'Employee';
+    transform: translateX(100%);
+    background-color: #f59e0b;
+}
+
+
+.switch-label::before {
+    content: 'Student';
+    display: block;
+    width: 50%;
+    height: 100%;
+    background-color: #3b82f6;
+    position: absolute;
+    left: 0;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Base styles for buttons and icons */
+.btn , .icon {
+    font: inherit;
+    background-color: #f0f0f0;
+    border: 0;
+    color: #7A7669;
+    font-size: 0.9rem; /* Slightly smaller font size */
+    padding: 0.25em 0.6em; /* Reduced padding for a smaller size */
+    text-shadow: 0 0.0625em 0 #fff;
+    box-shadow: inset 0 0.0625em 0 0 #f4f4f4, 0 0.0625em 0 0 #efefef,
+        0 0.125em 0 0 #ececec, 0 0.25em 0 0 #e0e0e0, 0 0.3125em 0 0 #dedede,
+        0 0.375em 0 0 #dcdcdc, 0 0.425em 0 0 #cacaca, 0 0.425em 0.5em 0 #cecece;
+    transition: 0.23s ease; /* Smooth transition for background and shadow */
+    cursor: pointer;
+    font-weight: bold;
+    margin: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none; /* Disable text selection */
+}
+
+
+
+/* Circular styles specifically for the icon buttons */
+.icon {
+    width: 35px; /* Adjust the width to match the desired size */
+    height: 35px; /* Adjust the height to match the desired size */
+    border-radius: 50%; /* Make the icon buttons circular */
+    padding: 0; /* Remove padding for a perfect circular shape */
+    margin-bottom: .2rem;
+}
+
+/* Icon image adjustments */
+.chat-input .icon img {
+    width: 18px;
+    height: 18px;
+    pointer-events: none; /* Prevent icon selection as text */
+}
+
+
+
+
+
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+
+.left {
+    border-top-left-radius: 0.5em;
+    border-bottom-left-radius: 0.5em;
+}
+
+.right {
+    border-top-right-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+}
+
+/* Active state for the student/employee buttons */
+.btn.active {
+    background-color: #ececec; /* Light background for active state */
+    color: skyblue; /* Skyblue text for active buttons */
+}
+
+/* Click animation for all buttons and icons */
+.btn:active, .icon:active {
+    transform: translateY(2px); /* Create a slight push-down effect */
+    box-shadow: inset 0 0.03em 0 0 #f4f4f4, 0 0.03em 0 0 #efefef,
+        0 0.0625em 0 0 #ececec, 0 0.125em 0 0 #e0e0e0, 0 0.125em 0 0 #dedede,
+        0 0.2em 0 0 #dcdcdc, 0 0.225em 0 0 #cacaca, 0 0.225em 0.375em 0 #cecece;
+    letter-spacing: 0.1em;
+}
+
+
+
+
+
+
+
+    /* Style for the placeholder text */
+    #user-input::placeholder {
+        color: #999; /* Customize the placeholder color */
+        text-align: left; /* Ensure the placeholder text aligns to the left */
+        font-size: 0.9rem; /* Adjust the font size if desired */
+    }
