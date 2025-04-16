@@ -17,10 +17,17 @@ SquVisor is a RAG-based chatbot designed to answer questions related to SQU (Sul
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/squvisor.git
-cd squvisor
+git clone https://github.com/MALAKBADER00/squVisor.git
 ```
-### 2. Create a `.env` File
+### 2. Create vertual environment 
+```
+python -m venv venv
+```
+### 3. Install dependencies 
+```
+pip install -r requirements.txt
+```
+### 4. Create a `.env` File
 Create a file named .env in the root directory of your project and add your OpenAI API key:
 ```
 OPENAI_API_KEY=your_openai_api_key_here
