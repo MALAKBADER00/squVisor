@@ -2,7 +2,7 @@
 
 SquVisor is a RAG-based chatbot designed to answer questions related to SQU (Sultan Qaboos University) regulations and policies. Built with Python and Django, it uses Retrieval-Augmented Generation (RAG) techniques to provide accurate and context-aware responses.
 
----
+
 
 ## 🚀 Features
 
@@ -11,7 +11,7 @@ SquVisor is a RAG-based chatbot designed to answer questions related to SQU (Sul
 - Retrieval-Augmented Generation (RAG) powered  
 - Django web framework  
 
----
+
 
 ## ⚙️ Setup & Run Instructions
 
